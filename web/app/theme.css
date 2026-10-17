@@ -1,0 +1,255 @@
+/* Brutalist design system tokens + primitives (Spec_FrontEnd_Design/README.md).
+   2px ink rules, zero radius, hard offset shadows, one accent. */
+
+:root {
+  --ink: #0a0a0a;
+  --paper: #f7f5ef;
+  --paper-alt: #efede6;
+  --accent: #e01b13;
+  --track: #e4e1d8;
+  --hairline: #d8d5cc;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* --- Primitives ------------------------------------------------------- */
+
+/* Hard-shadow CTA. Default: accent fill, ink shadow. */
+.hard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 20px 30px;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.hard-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.hard-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.hard-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* Ink fill, accent shadow (secondary CTA / downloads / recompute). */
+.hard-btn--ink {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 18px 26px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  box-shadow: 5px 5px 0 var(--accent);
+}
+.hard-btn--ink:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--accent);
+}
+.hard-btn--ink:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--accent);
+}
+.hard-btn--ink:disabled {
+  box-shadow: 5px 5px 0 var(--accent);
+}
+
+/* Small bordered button, no shadow (Copy resume link, Choose file). */
+.flat-btn {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.flat-btn:hover {
+  background: var(--paper-alt);
+}
+
+/* Mono section kicker: [ 01 ] descriptor. */
+.kicker {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.kicker b {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Solo accent kicker line (EXTERNAL DELIVERABLE / INTERNAL · RESTRICTED). */
+.kicker-solo {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Uppercase mono field/metric label. */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+/* Outlined mono tag (Shareable / INTERNAL / RESTRICTED). */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 2px solid var(--ink);
+  padding: 6px 10px;
+  color: var(--ink);
+}
+.tag--accent {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Accent-underlined text link. */
+.accent-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+}
+.accent-link--mono {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Progress meter: accent fill on track. Inner div gets the width. */
+.meter {
+  height: 16px;
+  background: var(--track);
+  border: 2px solid var(--ink);
+}
+.meter > div {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+.meter--thin {
+  height: 8px;
+  border-width: 1px;
+}
+.meter--mid {
+  height: 14px;
+}
+
+/* Segmented toggle row: buttons divided by 2px ink borders. */
+.seg {
+  display: flex;
+  border-left: 2px solid var(--ink);
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.seg > button {
+  flex: 0 0 auto;
+  padding: 16px 28px;
+  border: none;
+  border-right: 2px solid var(--ink);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--ink);
+}
+.seg > button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.seg > .seg-spacer {
+  flex: 1;
+}
+
+/* Hover-fill card/row (hub cards, list rows). */
+.hover-fill {
+  transition: background 0.15s ease;
+}
+.hover-fill:hover {
+  background: var(--paper-alt) !important;
+}
+
+/* List row slide-in on hover (external deliverables list). */
+.row-slide {
+  transition: background 0.14s ease, padding-left 0.14s ease;
+}
+.row-slide:hover {
+  background: var(--paper-alt) !important;
+  padding-left: 38px !important;
+}
+
+/* Borderless input with 2px ink underline (intake form). */
+.line-input {
+  border: none;
+  border-bottom: 2px solid var(--ink);
+  outline: none;
+  background: transparent;
+  padding: 8px 0;
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--ink);
+  width: 100%;
+}

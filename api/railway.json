@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "api/Dockerfile",
+    "watchPatterns": ["api/**", "shared/**", "knowledge/**", "migrations/**", "scripts/**", "pyproject.toml", "uv.lock"]
+  },
+  "deploy": {
+    "preDeployCommand": "uv run --no-dev --package playbook-api python scripts/migrate.py && uv run --no-dev --package playbook-api python scripts/reseed_questions.py",
+    "healthcheckPath": "/health",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}

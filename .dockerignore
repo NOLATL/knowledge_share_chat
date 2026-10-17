@@ -1,0 +1,17 @@
+# Keep build context small and never ship local/dev artifacts into images.
+.git
+.github
+.venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+node_modules
+web/node_modules
+web/.next
+web/out
+data
+.env
+.env.*
+*.md
+!README.md

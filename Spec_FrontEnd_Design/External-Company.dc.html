@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: var(--accent, #E01B13); color: #fff; }
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; --paper: {{ paper }}; --ink: #0A0A0A; min-height: 100vh; background: var(--paper); color: var(--ink); font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 22px 40px; border-bottom: 2px solid var(--ink);">
+    <a href="Hub.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink);">
+      <span style="width: 12px; height: 12px; background: var(--accent); display: inline-block;"></span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; letter-spacing: 0.22em;">PLAYBOOK</span>
+    </a>
+    <nav style="display: flex; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;">
+      <a href="Hub.dc.html" style="color: var(--ink); text-decoration: none;">Hub</a>
+      <a href="External-Deliverables.dc.html" style="color: var(--ink); text-decoration: none;">External</a>
+    </nav>
+  </header>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 40px; border-bottom: 2px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555;">
+    <span><a href="External-Deliverables.dc.html" style="color: #555; text-decoration: none;">External</a> / Nimbusworks Partners</span>
+    <span style="display: flex; align-items: center; gap: 8px; color: var(--ink);"><span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block;"></span> External Deliverable</span>
+  </div>
+
+  <main style="max-width: 1440px; margin: 0 auto; padding: 0 40px;">
+
+    <section style="padding: 60px 0 36px; border-bottom: 2px solid var(--ink);">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 22px;">External Deliverable</div>
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 28px;">
+        <div>
+          <h1 style="margin: 0; font-weight: 900; font-size: clamp(46px, 7vw, 108px); line-height: 0.9; letter-spacing: -0.035em; text-transform: uppercase;">Nimbusworks<br>Partners</h1>
+          <div style="margin-top: 22px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #666;">C-00138  &nbsp;·&nbsp;  Software &amp; SaaS  &nbsp;·&nbsp;  1&ndash;50</div>
+        </div>
+        <a href="#" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: var(--paper); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; padding: 18px 26px; border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); transition: transform 0.12s ease, box-shadow 0.12s ease;" style-hover="transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--accent);" style-active="transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--accent);">&#8595; Download deliverable</a>
+      </div>
+    </section>
+
+    <section style="display: flex; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
+      <button onClick="{{ selectCompany }}" style="flex: 0 0 auto; padding: 16px 28px; border: none; border-right: 2px solid var(--ink); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; background: {{ companyTabBg }}; color: {{ companyTabColor }};">Company (executive)</button>
+      <button onClick="{{ selectCfo }}" style="flex: 0 0 auto; padding: 16px 28px; border: none; border-right: 2px solid var(--ink); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; background: {{ cfoTabBg }}; color: {{ cfoTabColor }};">Office of the CFO</button>
+      <div style="flex: 1;"></div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(4, 1fr); border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="padding: 30px 26px 34px; border-right: 2px solid var(--ink);">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #777; margin-bottom: 18px;">{{ s.label }}</div>
+          <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-weight: 900; font-size: clamp(40px, 4.5vw, 68px); line-height: 0.85; letter-spacing: -0.03em;">{{ s.value }}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent); font-weight: 700;">{{ s.unit }}</span></div>
+          <div style="margin-top: 16px; font-size: 13px; line-height: 1.4; color: #666;">{{ s.note }}</div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display: grid; grid-template-columns: 1.35fr 1fr;">
+      <div style="padding: 44px; border-left: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #777; margin-bottom: 14px;">Persona</div>
+        <h2 style="margin: 0 0 22px; font-weight: 800; font-size: clamp(26px, 3vw, 40px); line-height: 1; letter-spacing: -0.02em; color: var(--accent); text-transform: uppercase;">{{ persona.title }}</h2>
+        <p style="margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: #2a2a2a;">{{ persona.body1 }}</p>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #666;">{{ persona.body2 }}</p>
+      </div>
+      <div style="padding: 44px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); background: {{ paperAlt }};">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #777; margin-bottom: 26px;">Where you sit in your cohort</div>
+        <sc-for list="{{ bars }}" as="b" hint-placeholder-count="2">
+          <div style="margin-bottom: 26px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #555;">{{ b.label }}</span><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 20px;">{{ b.value }}</span></div>
+            <div style="height: 14px; background: #E4E1D8; border: 2px solid var(--ink);"><div style="height: 100%; background: var(--accent); width: {{ b.pct }};"></div></div>
+            <div style="margin-top: 6px; font-size: 12px; line-height: 1.4; color: #888;">{{ b.note }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: 48px 0 20px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px;">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700;">[ Roadmap ]</span>
+        <h2 style="margin: 0; font-weight: 900; font-size: clamp(30px, 4vw, 56px); line-height: 0.95; letter-spacing: -0.02em; text-transform: uppercase;">{{ roadmapTitle }}</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); border: 2px solid var(--ink);">
+        <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+          <div style="padding: 30px 26px; border-right: 2px solid var(--ink);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 22px;"><span style="width: 10px; height: 10px; background: var(--accent); display: inline-block;"></span><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;">{{ ph.phase }}</span></div>
+            <sc-for list="{{ ph.items }}" as="it" hint-placeholder-count="3">
+              <div style="padding: 14px 0; border-top: 1px solid #D8D5CC;">
+                <div style="font-weight: 700; font-size: 16px; line-height: 1.2; margin-bottom: 5px;">{{ it.title }}</div>
+                <div style="font-size: 13px; line-height: 1.45; color: #777;">{{ it.desc }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <footer style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; padding: 28px 0 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #666;">
+      <span><a href="External-Deliverables.dc.html" style="color: #666; text-decoration: none;">&larr; All deliverables</a></span>
+      <span>Benchmarked Against Peers &mdash; 1 Voice Assessed</span>
+    </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 1000}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#E01B13&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;warm&quot;, &quot;options&quot;: [&quot;warm&quot;, &quot;white&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 'company' };
+
+  data() {
+    return {
+      company: {
+        stats: [
+          { label: 'Maturity', value: '3.8', unit: '/5', note: 'Composite across all functions' },
+          { label: 'Cohort standing', value: '69', unit: '%', note: 'Of all companies score at or below your maturity' },
+          { label: 'Peer standing', value: '82', unit: '%', note: 'Of industry + size peers at or below you' },
+          { label: 'Voices', value: '1', unit: '', note: 'Respondents assessed' },
+        ],
+        persona: {
+          title: 'CFOs in Compliance Conundrum',
+          body1: 'This cluster is comprised of CFOs who navigate complex financial landscapes, grappling with audit burdens and the costs of manual processes. They are motivated to invest in technology that streamlines accounting tasks and enhances reporting accuracy — pivoting toward solutions that facilitate efficient, compliant decision-making. With a foundational reliance on tools like QuickBooks and Excel, they are now exploring more advanced analytics.',
+          body2: 'These CFOs are strategic leaders focused on optimizing financial functions while ensuring compliance and accuracy. They seek tools that reduce manual workloads and mitigate errors, evaluating solutions on ease of use and integration with existing software.',
+        },
+        bars: [
+          { label: 'Cohort standing', value: '69%', pct: '69%', note: '2,140 companies benchmarked' },
+          { label: 'Peer standing (industry + size)', value: '82%', pct: '82%', note: 'Software & SaaS · 1–50 employees' },
+        ],
+        roadmapTitle: 'Company priorities',
+        phases: [
+          { phase: 'Now', items: [
+            { title: 'Close-cycle automation', desc: 'Cut manual month-end reconciliation with rule-based matching.' },
+            { title: 'Audit-ready evidence trail', desc: 'Centralize controls documentation ahead of next review.' },
+          ]},
+          { phase: 'Next', items: [
+            { title: 'Reporting accuracy layer', desc: 'Validation on top of QuickBooks + Excel exports.' },
+            { title: 'Spend visibility', desc: 'Real-time commitments across functions.' },
+          ]},
+          { phase: 'Later', items: [
+            { title: 'Predictive analytics', desc: 'Forecast variance and flag risk before quarter close.' },
+            { title: 'System consolidation', desc: 'Reduce tool sprawl into an integrated stack.' },
+          ]},
+        ],
+      },
+      cfo: {
+        stats: [
+          { label: 'CFO maturity', value: '4.1', unit: '/5', note: 'Office of the CFO function only' },
+          { label: 'Cohort standing', value: '74', unit: '%', note: 'Of CFO functions score at or below you' },
+          { label: 'Peer standing', value: '88', unit: '%', note: 'Of peer CFO offices at or below you' },
+          { label: 'Voices', value: '1', unit: '', note: 'CFO-function respondents' },
+        ],
+        persona: {
+          title: 'Strategic Compliance Operators',
+          body1: 'Within the Office of the CFO, the pattern is a lean team carrying heavy reporting and compliance load. Manual controls dominate, and the appetite is for automation that removes error risk without a disruptive rip-and-replace.',
+          body2: 'They index toward tooling that integrates with the incumbent stack, proves audit value quickly, and scales as headcount grows from the 1–50 band.',
+        },
+        bars: [
+          { label: 'Cohort standing', value: '74%', pct: '74%', note: 'All CFO functions in the dataset' },
+          { label: 'Peer standing (industry + size)', value: '88%', pct: '88%', note: 'Software & SaaS · 1–50 employees' },
+        ],
+        roadmapTitle: 'Office of the CFO',
+        phases: [
+          { phase: 'Now', items: [
+            { title: 'Controls documentation', desc: 'Standardize SOX-lite evidence in one place.' },
+            { title: 'Reconciliation rules', desc: 'Automate the top 10 recurring manual matches.' },
+          ]},
+          { phase: 'Next', items: [
+            { title: 'Board reporting pack', desc: 'Templated, source-linked, refresh on demand.' },
+            { title: 'Approval workflows', desc: 'Digitize sign-off chains for spend + journals.' },
+          ]},
+          { phase: 'Later', items: [
+            { title: 'Rolling forecast', desc: 'Driver-based model replacing static budget.' },
+            { title: 'Close acceleration', desc: 'Target a 3-day close from current 8-day.' },
+          ]},
+        ],
+      },
+    };
+  }
+
+  renderVals() {
+    const d = this.data()[this.state.tab];
+    const isCompany = this.state.tab === 'company';
+    return {
+      accent: this.props.accent ?? '#E01B13',
+      paper: (this.props.paper ?? 'warm') === 'white' ? '#FFFFFF' : '#F7F5EF',
+      paperAlt: (this.props.paper ?? 'warm') === 'white' ? '#F6F6F4' : '#EFEDE6',
+      companyTabBg: isCompany ? '#0A0A0A' : 'transparent',
+      companyTabColor: isCompany ? (this.props.paper === 'white' ? '#FFFFFF' : '#F7F5EF') : '#0A0A0A',
+      cfoTabBg: !isCompany ? '#0A0A0A' : 'transparent',
+      cfoTabColor: !isCompany ? (this.props.paper === 'white' ? '#FFFFFF' : '#F7F5EF') : '#0A0A0A',
+      selectCompany: () => this.setState({ tab: 'company' }),
+      selectCfo: () => this.setState({ tab: 'cfo' }),
+      stats: d.stats,
+      persona: d.persona,
+      bars: d.bars,
+      roadmapTitle: d.roadmapTitle,
+      phases: d.phases,
+    };
+  }
+}
+</script>
+</body>
+</html>

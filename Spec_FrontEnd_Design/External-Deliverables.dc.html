@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: var(--accent, #E01B13); color: #fff; }
+  input::placeholder { color: #999; }
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; --paper: {{ paper }}; --ink: #0A0A0A; min-height: 100vh; background: var(--paper); color: var(--ink); font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 22px 40px; border-bottom: 2px solid var(--ink);">
+    <a href="Hub.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink);">
+      <span style="width: 12px; height: 12px; background: var(--accent); display: inline-block;"></span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; letter-spacing: 0.22em;">PLAYBOOK</span>
+    </a>
+    <nav style="display: flex; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;">
+      <a href="Hub.dc.html" style="color: var(--ink); text-decoration: none;">Hub</a>
+      <a href="https://web-production-ac737.up.railway.app/" target="_blank" rel="noopener" style="color: var(--ink); text-decoration: none;">Chat</a>
+      <span style="color: var(--accent); border-bottom: 2px solid var(--accent);">External</span>
+    </nav>
+  </header>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 40px; border-bottom: 2px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555;">
+    <span>Hub / External / Deliverables</span>
+    <span style="display: flex; align-items: center; gap: 8px; color: var(--ink);"><span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block;"></span> Company-Facing</span>
+  </div>
+
+  <main style="max-width: 1440px; margin: 0 auto; padding: 0 40px;">
+
+    <section style="padding: 64px 0 40px; border-bottom: 2px solid var(--ink);">
+      <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 26px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;">
+        <span style="color: var(--accent); font-weight: 700;">[ 01 ]</span>
+        <span style="color: #444;">Executive rollup &amp; per-function breakdowns</span>
+      </div>
+      <h1 style="margin: 0; font-weight: 900; font-size: clamp(48px, 8vw, 130px); line-height: 0.9; letter-spacing: -0.035em; text-transform: uppercase;">External<br>Deliverables</h1>
+      <p style="margin: 40px 0 0; max-width: 620px; font-size: 19px; line-height: 1.5; color: #333;">Company-facing view. Every discovery session becomes an executive rollup plus a roadmap for each business function — benchmarked against peers, downloadable, safe to share.</p>
+    </section>
+
+    <section style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 0; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
+      <div style="flex: 1 1 320px; display: flex; align-items: center; gap: 14px; padding: 18px 24px; border-right: 2px solid var(--ink);">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #999;">&#8981;</span>
+        <input type="text" value="{{ query }}" onInput="{{ onQuery }}" placeholder="Filter by name, code, or industry…" style="flex: 1; border: none; outline: none; background: transparent; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--ink); letter-spacing: 0.02em;">
+      </div>
+      <label style="display: flex; align-items: center; gap: 12px; padding: 18px 24px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);">
+        <input type="checkbox" checked="{{ includeSynthetic }}" onChange="{{ onToggle }}" style="width: 16px; height: 16px; accent-color: var(--accent);">
+        Include synthetic companies
+      </label>
+      <div style="display: flex; align-items: center; padding: 18px 24px; border-left: 2px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #666;">{{ count }} Companies</div>
+    </section>
+
+    <section style="border-left: 2px solid var(--ink); border-right: 2px solid var(--ink);">
+      <sc-for list="{{ companies }}" as="co" hint-placeholder-count="6">
+        <a href="External-Company.dc.html" style="display: grid; grid-template-columns: minmax(0,1fr) 200px 130px 40px; align-items: center; gap: 24px; padding: 26px 28px; text-decoration: none; color: var(--ink); border-bottom: 2px solid var(--ink); background: var(--paper); transition: background 0.14s ease, padding-left 0.14s ease;" style-hover="background: #EFEDE6; padding-left: 38px;">
+          <div style="min-width: 0;">
+            <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+              <span style="font-weight: 800; font-size: clamp(20px, 2.2vw, 30px); letter-spacing: -0.01em;">{{ co.name }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 0.08em;">{{ co.code }}</span>
+            </div>
+            <div style="margin-top: 7px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #777;">{{ co.meta }}</div>
+          </div>
+          <div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #999;"><span>Maturity</span><span style="color: var(--ink); font-weight: 700;">{{ co.maturityLabel }}</span></div>
+            <div style="height: 8px; background: #E4E1D8; border: 1px solid var(--ink);"><div style="height: 100%; background: var(--accent); width: {{ co.barPct }};"></div></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 22px; line-height: 1;">{{ co.peerLabel }}</div>
+            <div style="margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #999;">Peer pct.</div>
+          </div>
+          <span style="justify-self: end; color: var(--accent); font-size: 22px;">&#8594;</span>
+        </a>
+      </sc-for>
+    </section>
+
+    <footer style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; padding: 28px 0 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #666;">
+      <span><a href="Hub.dc.html" style="color: #666; text-decoration: none;">&larr; Back to Hub</a></span>
+      <span>Vendor-Agnostic &mdash; Safe to Share</span>
+    </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 900}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#E01B13&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;warm&quot;, &quot;options&quot;: [&quot;warm&quot;, &quot;white&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}}">
+class Component extends DCLogic {
+  state = { query: '', includeSynthetic: false };
+
+  allCompanies() {
+    return [
+      { name: 'Nimbusworks Partners', code: 'C-00138', industry: 'Software & SaaS', respondents: 1, maturity: 3.8, peer: 82, synthetic: false },
+      { name: 'Chris R', code: 'C-00169', industry: 'Software & SaaS', respondents: 1, maturity: null, peer: null, synthetic: false },
+      { name: 'test 7 (form)', code: 'C-00168', industry: 'Manufacturing', respondents: 1, maturity: 2.2, peer: 5, synthetic: false },
+      { name: 'Test 6 (form ingested)', code: 'C-00167', industry: null, respondents: 1, maturity: 2.2, peer: 80, synthetic: false },
+      { name: 'Test 5', code: 'C-00166', industry: null, respondents: 1, maturity: 2.2, peer: 80, synthetic: false },
+      { name: 'Test 4', code: 'C-00165', industry: null, respondents: 1, maturity: 2.9, peer: 100, synthetic: false },
+      { name: 'Test 3 (email)', code: 'C-00164', industry: null, respondents: 1, maturity: 2.2, peer: 80, synthetic: false },
+      { name: 'Test 1', code: 'C-00162', industry: null, respondents: 1, maturity: 2.2, peer: 80, synthetic: false },
+      { name: 'Synthetic Alpha Co', code: 'S-00042', industry: 'Financial Services', respondents: 3, maturity: 3.4, peer: 66, synthetic: true },
+      { name: 'Synthetic Delta Group', code: 'S-00051', industry: 'Retail', respondents: 2, maturity: 1.9, peer: 22, synthetic: true },
+    ];
+  }
+
+  ordinal(n) {
+    if (n == null) return '—';
+    const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  renderVals() {
+    const q = this.state.query.trim().toLowerCase();
+    const rows = this.allCompanies()
+      .filter(c => this.state.includeSynthetic || !c.synthetic)
+      .filter(c => !q || (c.name + ' ' + c.code + ' ' + (c.industry || '')).toLowerCase().includes(q))
+      .map(c => {
+        const bits = [];
+        if (c.industry) bits.push(c.industry);
+        bits.push(c.respondents + ' respondent' + (c.respondents === 1 ? '' : 's'));
+        if (c.maturity != null) bits.push('maturity ' + c.maturity.toFixed(1) + '/5');
+        if (c.peer != null) bits.push(this.ordinal(c.peer) + ' peer pct.');
+        return {
+          ...c,
+          meta: bits.join('  ·  '),
+          maturityLabel: c.maturity != null ? c.maturity.toFixed(1) + '/5' : '—',
+          barPct: c.maturity != null ? Math.round((c.maturity / 5) * 100) + '%' : '0%',
+          peerLabel: c.peer != null ? this.ordinal(c.peer) : '—',
+        };
+      });
+    return {
+      accent: this.props.accent ?? '#E01B13',
+      paper: (this.props.paper ?? 'warm') === 'white' ? '#FFFFFF' : '#F7F5EF',
+      companies: rows,
+      count: rows.length,
+      query: this.state.query,
+      includeSynthetic: this.state.includeSynthetic,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      onToggle: (e) => this.setState({ includeSynthetic: e.target.checked }),
+    };
+  }
+}
+</script>
+</body>
+</html>

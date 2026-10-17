@@ -1,0 +1,10 @@
+# pnpm settings for the web app. (No `packages:` key — web is a standalone
+# project; this file only carries pnpm config.)
+# Allow these dependencies to run install/build scripts (pnpm blocks by default):
+#   esbuild        — native binary used by vitest
+#   sharp          — Next.js image optimization
+#   unrs-resolver  — eslint module resolver native binding
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

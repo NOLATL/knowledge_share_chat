@@ -1,0 +1,244 @@
+# ============================================================================
+# Playbook discovery question bank — THE SINGLE SOURCE OF TRUTH for the script.
+#
+# This file is editable by non-engineers. Run `python scripts/reseed_questions.py`
+# to sync it to the database; the conversation engine reads the ACTIVE questions
+# from the DB at runtime, so a reseed takes effect on the next session with no
+# redeploy.
+#
+# HOW TO EDIT
+#   - Reword a question:      change its `text` (always safe).
+#   - Reorder the script:     change `order_hint` (lower = asked earlier).
+#   - Change importance:      set `tier` to must_fill | nice_to_have.
+#   - Retire a question:      DELETE it here (reseed sets active=false; it is
+#                             never hard-deleted, and its historical answers stay).
+#   - Add a question:         add a new entry with a brand-new unique `slot_key`.
+#
+# THE ONE HARD RULE — slot_key is an immutable contract
+#   NEVER rename or reuse an existing `slot_key`. Feature vectors and longitudinal
+#   benchmarks are keyed on it; renaming silently breaks cross-cohort comparison.
+#   To "change" a slot: retire the old key (remove it) and add a new key.
+#
+# FIELDS (all required)
+#   slot_key      stable machine key, e.g. 'close.days' (immutable)
+#   category      A | B | C | D | E | F  (see headers below)
+#   text          the canonical intent; the agent improvises exact wording
+#   framework_tag SPIN-* | MEDDIC-* | JTBD-*  (sales-methodology tag)
+#   tier          must_fill | nice_to_have
+#   order_hint    integer; lower is asked earlier
+#   active        true | false (managed by reseed; leave true for live questions)
+#
+# Bump `version` whenever you change the script; every session records the
+# version it was answered against (sessions.script_version).
+# ============================================================================
+
+version: "2026.07.0"
+
+questions:
+  # --- A. Company & role context ---
+  - slot_key: ctx.role
+    category: A
+    text: "Your role and which finance/accounting functions you own."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 10
+    active: true
+  - slot_key: ctx.company_profile
+    category: A
+    text: "Company size, entities, geographies, public/private."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 20
+    active: true
+  - slot_key: ctx.team_structure
+    category: A
+    text: "Size and structure of the finance/FP&A team."
+    framework_tag: SPIN-Situation
+    tier: nice_to_have
+    order_hint: 30
+    active: true
+
+  # --- B. Core accounting processes ---
+  - slot_key: close.days
+    category: B
+    text: "Days to complete month-end close, and the most painful part."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 40
+    active: true
+  - slot_key: recon.manual_vs_auto
+    category: B
+    text: "Which accounts (bank, intercompany, balance sheet) are reconciled manually vs. automated."
+    framework_tag: SPIN-Problem
+    tier: must_fill
+    order_hint: 50
+    active: true
+  - slot_key: apar.volume
+    category: B
+    text: "Monthly invoice/payment volume and how much matching is manual."
+    framework_tag: SPIN-Situation
+    tier: nice_to_have
+    order_hint: 60
+    active: true
+  - slot_key: consolidation.method
+    category: B
+    text: "Number of entities/ERPs consolidated and how (Excel, EPM tool)."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 70
+    active: true
+  - slot_key: reporting.process
+    category: B
+    text: "How management/board reports are built and how long it takes."
+    framework_tag: SPIN-Problem
+    tier: nice_to_have
+    order_hint: 80
+    active: true
+  - slot_key: fpa.cadence
+    category: B
+    text: "Budgeting/forecasting cadence; driver-based or spreadsheet; scenario planning."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 90
+    active: true
+  - slot_key: tax.process
+    category: B
+    text: "How sales/use tax, VAT/GST, and transfer pricing are prepared and reconciled."
+    framework_tag: SPIN-Problem
+    tier: nice_to_have
+    order_hint: 100
+    active: true
+
+  # --- C. Systems & tech stack ---
+  - slot_key: sys.erp
+    category: C
+    text: "ERP(s): NetSuite, SAP, Oracle, Dynamics, QuickBooks, Sage, etc."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 110
+    active: true
+  - slot_key: sys.dataprep_tools
+    category: C
+    text: "Data-prep/automation tools: Excel, Power Query, Alteryx, Tableau Prep, Power BI, SQL, Python."
+    framework_tag: SPIN-Situation
+    tier: must_fill
+    order_hint: 120
+    active: true
+  - slot_key: sys.data_location
+    category: C
+    text: "Where data lives: SharePoint/Excel, warehouse, lake, CRM (Salesforce)."
+    framework_tag: SPIN-Situation
+    tier: nice_to_have
+    order_hint: 130
+    active: true
+  - slot_key: sys.epm_close_tools
+    category: C
+    text: "RPA, EPM (Anaplan, Pigment, Workday Adaptive), close tools (BlackLine, FloQast)."
+    framework_tag: SPIN-Situation
+    tier: nice_to_have
+    order_hint: 140
+    active: true
+
+  # --- D. Technical skill levels ---
+  - slot_key: skill.builders
+    category: D
+    text: "Who builds workflows today: business analysts vs. data engineers/IT."
+    framework_tag: MEDDIC-DecisionProcess
+    tier: must_fill
+    order_hint: 150
+    active: true
+  - slot_key: skill.sql_python
+    category: D
+    text: "Team comfort with SQL/Python; self-service vs. IT-dependent."
+    framework_tag: SPIN-Situation
+    tier: nice_to_have
+    order_hint: 160
+    active: true
+  - slot_key: skill.onboarding_time
+    category: D
+    text: "Time to onboard a new analyst to current tooling."
+    framework_tag: SPIN-Implication
+    tier: nice_to_have
+    order_hint: 170
+    active: true
+
+  # --- E. Pain points ---
+  - slot_key: pain.error_cost
+    category: E
+    text: "Where errors occur most and the cost/risk when they do."
+    framework_tag: SPIN-Implication
+    tier: must_fill
+    order_hint: 180
+    active: true
+  - slot_key: pain.manual_hours
+    category: E
+    text: "Hours/month on manual data prep vs. analysis."
+    framework_tag: SPIN-Implication
+    tier: must_fill
+    order_hint: 190
+    active: true
+  - slot_key: pain.bus_factor
+    category: E
+    text: "What breaks when a key person is out; key-person risk."
+    framework_tag: SPIN-Implication
+    tier: nice_to_have
+    order_hint: 200
+    active: true
+  - slot_key: pain.audit_burden
+    category: E
+    text: "How audit/SOX evidence is captured today."
+    framework_tag: SPIN-Problem
+    tier: nice_to_have
+    order_hint: 210
+    active: true
+
+  # --- F. Goals & decision context ---
+  - slot_key: goal.future_state
+    category: F
+    text: 'What "great" looks like in 12 months and the metric that proves it.'
+    framework_tag: SPIN-NeedPayoff
+    tier: must_fill
+    order_hint: 220
+    active: true
+  - slot_key: goal.trigger
+    category: F
+    text: "What's triggering this evaluation now (critical event)."
+    framework_tag: MEDDIC-Metrics
+    tier: must_fill
+    order_hint: 230
+    active: true
+  - slot_key: goal.decision_process
+    category: F
+    text: "Who decides, who funds, how tools are evaluated/bought."
+    framework_tag: MEDDIC-EconomicBuyer
+    tier: must_fill
+    order_hint: 240
+    active: true
+  - slot_key: goal.blockers
+    category: F
+    text: "What has blocked solving this already."
+    framework_tag: MEDDIC-IdentifyPain
+    tier: nice_to_have
+    order_hint: 250
+    active: true
+  - slot_key: company.strategic_plan_1yr
+    category: F
+    text: "Key company priorities or growth initiatives for the next 12 months."
+    framework_tag: SPIN-NeedPayoff
+    tier: nice_to_have
+    order_hint: 260
+    active: true
+  - slot_key: company.strategic_plan_3yr
+    category: F
+    text: "What company success looks like in about 3 years."
+    framework_tag: SPIN-NeedPayoff
+    tier: nice_to_have
+    order_hint: 270
+    active: true
+  - slot_key: company.strategic_plan_5yr
+    category: F
+    text: "The long-term 5-year vision for the company."
+    framework_tag: SPIN-NeedPayoff
+    tier: nice_to_have
+    order_hint: 280
+    active: true

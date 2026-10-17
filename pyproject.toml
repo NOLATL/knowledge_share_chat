@@ -1,0 +1,23 @@
+# uv workspace root (virtual — no [project] table of its own).
+# Members are the three Python services; `playbook-shared` is resolved
+# from the workspace so api/worker import it without publishing.
+
+[tool.uv.workspace]
+members = ["api", "worker", "shared"]
+
+[tool.uv.sources]
+playbook-shared = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "testcontainers>=4.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.pytest.ini_options]
+addopts = "-q"

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: var(--accent, #E01B13); color: #fff; }
+</style>
+</helmet>
+<div style="--accent: {{ accent }}; --paper: {{ paper }}; --ink: #0A0A0A; min-height: 100vh; background: var(--paper); color: var(--ink); font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 22px 40px; border-bottom: 2px solid var(--ink);">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="width: 12px; height: 12px; background: var(--accent); display: inline-block;"></span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; letter-spacing: 0.22em;">PLAYBOOK</span>
+    </div>
+    <nav style="display: flex; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;">
+      <a href="https://web-production-ac737.up.railway.app/" target="_blank" rel="noopener" style="color: var(--ink); text-decoration: none;">Chat</a>
+      <a href="https://web-production-ac737.up.railway.app/external" target="_blank" rel="noopener" style="color: var(--ink); text-decoration: none;">External</a>
+      <a href="https://web-production-ac737.up.railway.app/internal" target="_blank" rel="noopener" style="color: var(--ink); text-decoration: none;">Internal</a>
+    </nav>
+  </header>
+
+  <div style="display: flex; align-items: stretch; justify-content: space-between; padding: 12px 40px; border-bottom: 2px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #555;">
+    <span>Hub / Analytics &amp; Deliverables</span>
+    <span style="display: flex; align-items: center; gap: 8px; color: var(--ink);"><span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block;"></span> Presales Intelligence Engine</span>
+  </div>
+
+  <main style="max-width: 1440px; margin: 0 auto; padding: 0 40px;">
+
+    <section style="padding: 72px 0 56px; border-bottom: 2px solid var(--ink);">
+      <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 30px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;">
+        <sc-if value="{{ showIndex }}" hint-placeholder-val="{{ true }}"><span style="color: var(--accent); font-weight: 700;">[ 00 ]</span></sc-if>
+        <span style="color: #444;">Everything discovery learns, delivered at two levels</span>
+      </div>
+
+      <h1 style="margin: 0; font-weight: 900; font-size: clamp(52px, 9.5vw, 158px); line-height: 0.9; letter-spacing: -0.035em; text-transform: uppercase;">Analytics <span style="color: var(--accent);">&amp;</span><br>Deliverables</h1>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: 48px;">
+        <p style="margin: 0; max-width: 560px; font-size: 20px; line-height: 1.5; color: #333;">A RAG-driven chatbot runs the discovery session with finance &amp; accounting teams. From that conversation, Playbook produces company and prospect analytics.</p>
+        <a href="https://web-production-ac737.up.railway.app/" target="_blank" rel="noopener" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 14px; background: var(--accent); color: #fff; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; padding: 20px 30px; border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); transition: transform 0.12s ease, box-shadow 0.12s ease;" style-hover="transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink);" style-active="transform: translate(3px,3px); box-shadow: 2px 2px 0 var(--ink);">Start a discovery session <span style="font-size: 18px;">→</span></a>
+      </div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: 1fr 1fr; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink);">
+
+      <a href="https://web-production-ac737.up.railway.app/external" target="_blank" rel="noopener" style="display: flex; flex-direction: column; padding: 44px; text-decoration: none; color: var(--ink); border-bottom: 2px solid var(--ink); background: var(--paper); transition: background 0.15s ease;" style-hover="background: #EFEDE6;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 40px;">
+          <sc-if value="{{ showIndex }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 56px; line-height: 1; color: var(--ink);">01</span></sc-if>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; border: 2px solid var(--ink); padding: 6px 10px; color: var(--ink);">Shareable</span>
+        </div>
+        <h2 style="margin: 0 0 18px; font-weight: 900; font-size: clamp(38px, 4.6vw, 64px); line-height: 0.92; letter-spacing: -0.02em; text-transform: uppercase;">External</h2>
+        <p style="margin: 0 0 28px; font-size: 16px; line-height: 1.55; color: #444;">The company-facing deliverable: an executive rollup plus a roadmap for each business function, benchmarked against peers. Viewable in-browser and downloadable per function or as one paginated document. Vendor-agnostic — safe to share.</p>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Open external deliverables <span style="color: var(--accent); font-size: 18px;">→</span></div>
+      </a>
+
+      <a href="https://web-production-ac737.up.railway.app/internal" target="_blank" rel="noopener" style="display: flex; flex-direction: column; padding: 44px; text-decoration: none; color: var(--ink); border-bottom: 2px solid var(--ink); border-left: 2px solid var(--ink); background: var(--paper); transition: background 0.15s ease;" style-hover="background: #EFEDE6;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 40px;">
+          <sc-if value="{{ showIndex }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 56px; line-height: 1; color: var(--ink);">02</span></sc-if>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; border: 2px solid var(--ink); padding: 6px 10px; color: var(--ink);">INTERNAL</span>
+        </div>
+        <h2 style="margin: 0 0 18px; font-weight: 900; font-size: clamp(38px, 4.6vw, 64px); line-height: 0.92; letter-spacing: -0.02em; text-transform: uppercase;">Internal</h2>
+        <p style="margin: 0 0 28px; font-size: 16px; line-height: 1.55; color: #444;">Cohort intelligence for the room only: function and company personas with named-member drill-down, account intel with product fit, pressure rankings, the positioning map, and the macro write-up with the investor narrative. Admin token required.</p>
+        <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">Open internal dashboard <span style="color: var(--accent); font-size: 18px;">→</span></div>
+      </a>
+
+    </section>
+
+    <footer style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; padding: 28px 0 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #666;">
+      <span>Playbook © 2026 — Presales Intelligence</span>
+      <span>RAG Discovery → Two Surfaces</span>
+    </footer>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 860}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#E01B13&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;warm&quot;, &quot;options&quot;: [&quot;warm&quot;, &quot;white&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot;}, &quot;showIndexNumbers&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const paperMap = { warm: '#F7F5EF', white: '#FFFFFF' };
+    return {
+      accent: this.props.accent ?? '#E01B13',
+      paper: paperMap[this.props.paper ?? 'warm'] ?? '#F7F5EF',
+      showIndex: this.props.showIndexNumbers ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>
