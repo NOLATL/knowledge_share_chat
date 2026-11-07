@@ -5,11 +5,11 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 
-from api import admin, report_generation, report_repo
+from api import report_generation, report_repo
 
 router = APIRouter()
 
@@ -23,8 +23,7 @@ class InternalReportOut(BaseModel):
 
 
 @router.post("/reports/internal", response_model=InternalReportOut)
-async def post_internal_report(authorization: str | None = Header(default=None)) -> InternalReportOut:
-    admin._require_admin(authorization)
+async def post_internal_report() -> InternalReportOut:
     try:
         report = await report_generation.generate_internal_intelligence()
     except ValueError as exc:
@@ -33,8 +32,7 @@ async def post_internal_report(authorization: str | None = Header(default=None))
 
 
 @router.get("/reports/internal/latest", response_model=InternalReportOut)
-async def get_latest_internal_report(authorization: str | None = Header(default=None)) -> InternalReportOut:
-    admin._require_admin(authorization)
+async def get_latest_internal_report() -> InternalReportOut:
     report = await run_in_threadpool(report_repo.latest_internal_report)
     if report is None:
         raise HTTPException(status_code=404, detail="report not found")
@@ -53,9 +51,7 @@ class AccountReportOut(BaseModel):
 @router.post("/companies/{company_id}/reports/account", response_model=AccountReportOut)
 async def post_account_report(
     company_id: uuid.UUID,
-    authorization: str | None = Header(default=None),
 ) -> AccountReportOut:
-    admin._require_admin(authorization)
     try:
         report = await report_generation.generate_account_report(company_id)
     except ValueError as exc:
@@ -68,9 +64,7 @@ async def post_account_report(
 @router.get("/companies/{company_id}/reports/account/latest", response_model=AccountReportOut)
 async def get_latest_account_report(
     company_id: uuid.UUID,
-    authorization: str | None = Header(default=None),
 ) -> AccountReportOut:
-    admin._require_admin(authorization)
     report = await run_in_threadpool(report_repo.latest_company_report, company_id, "account_internal")
     if report is None:
         raise HTTPException(status_code=404, detail="report not found")

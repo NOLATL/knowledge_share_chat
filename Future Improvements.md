@@ -27,7 +27,6 @@ Ideas captured during evaluation — under consideration for future iterations.
 
 ## Ops & security
 
-- **Rotate the admin token.** The current token has appeared in chats and URLs; rotate it once demos settle.
 - **Fix the worker/migration deploy race.** On deploy, the worker job can start before the api service's pre-deploy migration step runs (crashed once on a missing column). Move migrations ahead of the worker too, or make the worker retry.
 
 ## Predictions

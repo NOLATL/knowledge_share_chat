@@ -1,13 +1,12 @@
-"""Admin-only analytics controls."""
+"""Admin analytics controls. No app-level auth: the deployment boundary (tailnet) is the access control."""
 
 from __future__ import annotations
 
-import os
 from datetime import date, datetime
 from decimal import Decimal
 from uuid import UUID
 
-from fastapi import APIRouter, Header, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
 
 from playbook_shared.analytics import recompute
@@ -16,17 +15,8 @@ from playbook_shared.db import connect
 router = APIRouter(prefix="/admin")
 
 
-def _require_admin(authorization: str | None) -> None:
-    token = os.environ.get("ADMIN_RECOMPUTE_TOKEN")
-    if not token:
-        raise HTTPException(status_code=503, detail="ADMIN_RECOMPUTE_TOKEN is not set")
-    if authorization != f"Bearer {token}":
-        raise HTTPException(status_code=401, detail="invalid admin token")
-
-
 @router.post("/recompute")
-async def post_recompute(authorization: str | None = Header(default=None)) -> dict:
-    _require_admin(authorization)
+async def post_recompute() -> dict:
     summary = await run_in_threadpool(recompute)
     return {
         "respondents_processed": summary.respondents_processed,
@@ -43,8 +33,7 @@ async def post_recompute(authorization: str | None = Header(default=None)) -> di
 
 
 @router.get("/internal")
-async def get_internal(authorization: str | None = Header(default=None)) -> dict:
-    _require_admin(authorization)
+async def get_internal() -> dict:
     return await run_in_threadpool(_internal_snapshot)
 
 
@@ -173,11 +162,7 @@ def _num(value) -> float | None:
 
 
 @router.get("/demo/status")
-async def get_demo_status(
-    authorization: str | None = Header(default=None),
-    session_id: UUID | None = Query(default=None),
-) -> dict:
-    _require_admin(authorization)
+async def get_demo_status(session_id: UUID | None = Query(default=None)) -> dict:
     if session_id is None:
         raise HTTPException(status_code=400, detail="session_id is required")
     status = await run_in_threadpool(_demo_status, session_id)

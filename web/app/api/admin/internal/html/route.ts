@@ -150,13 +150,8 @@ function scopeMarkdown(scope: Snapshot["scopes"][string]): string {
   return lines.join("\n");
 }
 
-export async function GET(req: Request) {
-  const token = new URL(req.url).searchParams.get("token");
-  if (!token) {
-    return Response.json({ detail: "missing admin token" }, { status: 400 });
-  }
-  const headers = { authorization: `Bearer ${token}` };
-  const snapshotRes = await fetch(`${API_BASE}/admin/internal`, { headers, cache: "no-store" });
+export async function GET() {
+  const snapshotRes = await fetch(`${API_BASE}/admin/internal`, { cache: "no-store" });
   if (!snapshotRes.ok) {
     return new Response(await snapshotRes.text(), {
       status: snapshotRes.status,
@@ -180,7 +175,7 @@ export async function GET(req: Request) {
       html: `<h1>Cohort personas — function grain</h1>${personaMapHtml(snapshot.scopes.function.clusters)}`,
     },
   ];
-  const macroRes = await fetch(`${API_BASE}/reports/internal/latest`, { headers, cache: "no-store" });
+  const macroRes = await fetch(`${API_BASE}/reports/internal/latest`, { cache: "no-store" });
   if (macroRes.ok) {
     const macro = (await macroRes.json()) as { rendered_md: string; created_at: string };
     sections.push({

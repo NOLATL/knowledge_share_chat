@@ -72,7 +72,7 @@ type PersonaViz = {
 
 const NEUTRAL_FILL = "#9A968B";
 
-export default function InternalDashboard({ token }: { token: string }) {
+export default function InternalDashboard() {
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [error, setError] = useState("");
   const [grain, setGrain] = useState<"function" | "company">("company");
@@ -82,10 +82,10 @@ export default function InternalDashboard({ token }: { token: string }) {
   const [recompute, setRecompute] = useState<RecomputeState>({ status: "idle", message: "", result: null });
 
   const fetchSnapshot = useCallback(async () => {
-    const r = await fetch(`/api/admin/internal?token=${encodeURIComponent(token)}`);
+    const r = await fetch("/api/admin/internal");
     if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `HTTP ${r.status}`);
     setSnapshot((await r.json()) as Snapshot);
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     fetchSnapshot().catch((e: Error) => setError(e.message));
@@ -100,11 +100,7 @@ export default function InternalDashboard({ token }: { token: string }) {
       result: null,
     });
     try {
-      const response = await fetch("/api/admin/recompute", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
+      const response = await fetch("/api/admin/recompute", { method: "POST" });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(typeof body.detail === "string" ? body.detail : `HTTP ${response.status}`);
@@ -115,11 +111,7 @@ export default function InternalDashboard({ token }: { token: string }) {
         message: "Personas recomputed. Rewriting the intelligence write-up and refreshing the dashboard…",
         result,
       });
-      const r = await fetch("/api/admin/reports/internal", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
+      const r = await fetch("/api/admin/reports/internal", { method: "POST" });
       if (!r.ok) {
         throw new Error((await r.json().catch(() => null))?.detail ?? "Write-up regeneration failed.");
       }
@@ -139,7 +131,7 @@ export default function InternalDashboard({ token }: { token: string }) {
         result: null,
       });
     }
-  }, [token, fetchSnapshot]);
+  }, [fetchSnapshot]);
 
   const scope = snapshot?.scopes[grain];
   const viz = useMemo(() => buildViz(scope?.clusters ?? []), [scope]);
@@ -192,7 +184,7 @@ export default function InternalDashboard({ token }: { token: string }) {
               {recompute.status === "running" ? "Running…" : "Run recompute"}
             </button>
             <a
-              href={`/api/admin/internal/html?token=${encodeURIComponent(token)}`}
+              href="/api/admin/internal/html"
               className="hard-btn hard-btn--ink"
             >
               ↓ Download dashboard
@@ -535,7 +527,7 @@ export default function InternalDashboard({ token }: { token: string }) {
         </article>
       )}
 
-      {selectedMember && <MemberDrilldown member={selectedMember} token={token} />}
+      {selectedMember && <MemberDrilldown member={selectedMember} />}
 
       <PressurePanel
         title={`Pressure ranking (${grain} grain) — ${selected?.persona.label ?? "All"}`}
@@ -548,7 +540,7 @@ export default function InternalDashboard({ token }: { token: string }) {
         }
       />
 
-      <MacroWriteup token={token} refreshKey={writeupKey} />
+      <MacroWriteup refreshKey={writeupKey} />
     </>
   );
 }
@@ -628,7 +620,7 @@ function buildTakeaways(viz: PersonaViz[]): Map<string, string> {
 
 // The client write-up: account intel for the clicked member, formatted like
 // every other write-up panel, with a button through to the External view.
-function MemberDrilldown({ member, token }: { member: Member; token: string }) {
+function MemberDrilldown({ member }: { member: Member }) {
   return (
     <section style={card} aria-label="Member drill-down">
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
@@ -667,16 +659,16 @@ function MemberDrilldown({ member, token }: { member: Member; token: string }) {
           Open external view →
         </a>
       </div>
-      <AccountIntel companyId={member.company_id} token={token} />
+      <AccountIntel companyId={member.company_id} />
     </section>
   );
 }
 
-function AccountIntel({ companyId, token }: { companyId: string; token: string }) {
+function AccountIntel({ companyId }: { companyId: string }) {
   const [report, setReport] = useState<Report | null>(null);
   const [status, setStatus] = useState("");
   const [generating, setGenerating] = useState(false);
-  const query = `companyId=${encodeURIComponent(companyId)}&token=${encodeURIComponent(token)}`;
+  const query = `companyId=${encodeURIComponent(companyId)}`;
 
   useEffect(() => {
     setStatus("Loading account intel…");
@@ -743,12 +735,12 @@ function AccountIntel({ companyId, token }: { companyId: string; token: string }
 
 // Same section shape as the External write-up panel (header, generated line,
 // hairline rule, report text).
-function MacroWriteup({ token, refreshKey }: { token: string; refreshKey: number }) {
+function MacroWriteup({ refreshKey }: { refreshKey: number }) {
   const [report, setReport] = useState<Report | null>(null);
   const [status, setStatus] = useState("Loading write-up…");
 
   useEffect(() => {
-    fetch(`/api/admin/reports/internal?token=${encodeURIComponent(token)}`)
+    fetch("/api/admin/reports/internal")
       .then(async (r) => {
         if (r.status === 404) {
           setStatus("No write-up generated yet — run a recompute.");
@@ -759,7 +751,7 @@ function MacroWriteup({ token, refreshKey }: { token: string; refreshKey: number
         setStatus("");
       })
       .catch((e: Error) => setStatus(e.message));
-  }, [token, refreshKey]);
+  }, [refreshKey]);
 
   return (
     <section style={{ ...card, marginBottom: 18 }} aria-label="Internal intelligence write-up">

@@ -46,24 +46,16 @@ type LoadState =
   | { status: "ready"; data: DemoStatus }
   | { status: "error"; message: string };
 
-export default function DemoCockpit({
-  initialToken = "",
-  initialSessionId = "",
-}: {
-  initialToken?: string;
-  initialSessionId?: string;
-}) {
-  const [token, setToken] = useState(initialToken);
+export default function DemoCockpit({ initialSessionId = "" }: { initialSessionId?: string }) {
   const [sessionId, setSessionId] = useState(initialSessionId);
-  const [state, setState] = useState<LoadState>(initialToken && initialSessionId ? { status: "loading" } : { status: "idle" });
+  const [state, setState] = useState<LoadState>(initialSessionId ? { status: "loading" } : { status: "idle" });
 
   const query = useMemo(() => {
     const params = new URLSearchParams();
-    params.set("token", token.trim());
     params.set("sessionId", sessionId.trim());
     return params.toString();
-  }, [sessionId, token]);
-  const canLoad = Boolean(token.trim() && sessionId.trim());
+  }, [sessionId]);
+  const canLoad = Boolean(sessionId.trim());
 
   const loadStatus = useCallback(() => {
     if (!canLoad) {
@@ -82,13 +74,12 @@ export default function DemoCockpit({
   }, [canLoad, query]);
 
   useEffect(() => {
-    if (initialToken && initialSessionId) loadStatus();
-  }, [initialToken, initialSessionId, loadStatus]);
+    if (initialSessionId) loadStatus();
+  }, [initialSessionId, loadStatus]);
 
   const active = state.status === "ready" ? state.data : null;
   const resumeUrl = active ? `/session/${active.session.resume_token}` : "#";
   const externalUrl = active?.session.company_id ? `/external/${active.session.company_id}` : "#";
-  const internalUrl = `/internal?token=${encodeURIComponent(token.trim())}`;
 
   return (
     <main className="shell">
@@ -108,16 +99,12 @@ export default function DemoCockpit({
           Session id
           <input value={sessionId} onChange={(event) => setSessionId(event.target.value)} placeholder="Session UUID" />
         </label>
-        <label>
-          Admin token
-          <input value={token} onChange={(event) => setToken(event.target.value)} placeholder="Admin token" type="password" />
-        </label>
         <button type="button" disabled={!canLoad || state.status === "loading"} onClick={loadStatus}>
           {state.status === "loading" ? "Loading..." : "Load demo"}
         </button>
       </section>
 
-      {state.status === "idle" && <section className="panel muted">Enter a session id and admin token to load demo readiness.</section>}
+      {state.status === "idle" && <section className="panel muted">Enter a session id to load demo readiness.</section>}
       {state.status === "error" && (
         <section className="panel error">
           <h2>Demo status unavailable</h2>
@@ -185,7 +172,7 @@ export default function DemoCockpit({
               title="Open the internal dashboard"
               status={active!.analytics.latest_run ? "Analytics ready" : "Needs recompute"}
               detail="Cohort personas, account intel, product fit, and the macro write-up."
-              href={internalUrl}
+              href="/internal"
             />
           </section>
         </>

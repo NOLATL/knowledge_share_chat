@@ -206,7 +206,7 @@ Examples of other purposeful conversations it could capture and analyze:
 | Data | Postgres + pgvector (HNSW indexes) |
 | Documents | Docling + pandas parsing, chunked and embedded per session |
 | Analytics | scikit-learn, UMAP, HDBSCAN, NetworkX; LLM persona labeling |
-| Delivery | Railway (web, api, worker, Postgres), GitHub Actions CI gating every deploy |
+| Delivery | Docker Compose on a self-hosted machine (web, api, Postgres), private network only; GitHub Actions CI |
 
 ---
 
@@ -299,10 +299,11 @@ cd web && pnpm test                         # web
 ### CI / Deployment
 
 CI (lint + tests for every service) runs via GitHub Actions
-([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)) and gates Railway
-deploys (Wait-for-CI). Each service builds from its Dockerfile; per-service
-`railway.json` files carry the build/deploy config. Full Railway setup steps are
-in [`docs/deploy-railway.md`](./docs/deploy-railway.md).
+([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)). Each service builds from
+its Dockerfile. The demo runs as a Docker Compose stack on a self-hosted machine,
+reachable only on a private network; see [`docs/demo.md`](./docs/demo.md). It was
+hosted on Railway until 2026-11; the per-service `railway.json` files are kept only
+for that history.
 
 Environment variables are documented in [`.env.example`](./.env.example).
 
@@ -310,8 +311,8 @@ Environment variables are documented in [`.env.example`](./.env.example).
 
 Epic 2 analytics are on-demand for the POC/demo stage: synthetic seeding is an
 explicit script, and recompute is triggered through `POST /admin/recompute` or a
-manual worker run. The internal review dashboard is served by the web app at
-`/admin/analytics` and is protected by the admin token. See
+manual worker run. The internal dashboard is served by the web app at
+`/internal`. There is no app-level login: keep the deployment private (tailnet). See
 [`docs/analytics-epic2.md`](./docs/analytics-epic2.md).
 
 ### Demo

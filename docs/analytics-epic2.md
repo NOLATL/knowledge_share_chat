@@ -11,8 +11,7 @@ the full analytics loop live:
   coordinates, append-only cluster runs, clusters, and benchmark rows.
 - Latest production gate after content-weighted pain scoring: 150 respondents,
   6 clusters, silhouette 0.376, and 150 benchmarks.
-- `/admin/analytics` is live on the Railway web service as the internal review
-  dashboard, with manual recompute controls.
+- `/internal` is the internal review dashboard, with manual recompute controls.
 
 Deferred from Epic 2:
 
@@ -24,8 +23,8 @@ Deferred from Epic 2:
 - LLM-generated narrative summaries. Current cluster labels and summaries are
   deterministic/cost-controlled.
 
-Analytics recompute is on demand by default for the POC/demo stage. The worker
-Railway cron is disabled in `worker/railway.json`; use the admin endpoint or a
+Analytics recompute is on demand by default for the POC/demo stage. The worker has
+no schedule; use the admin endpoint or a
 manual worker run when you want to refresh clusters and benchmarks.
 
 ## Synthetic cohort
@@ -48,20 +47,18 @@ existing rows instead of flooding the database.
 Manual API trigger:
 
 ```bash
-curl -X POST "$API_BASE_URL/admin/recompute" \
-  -H "Authorization: Bearer $ADMIN_RECOMPUTE_TOKEN"
+curl -X POST "$API_BASE_URL/admin/recompute"
 ```
 
 Internal dashboard:
 
 ```text
-/admin/analytics
+/internal
 ```
 
-The dashboard is token-gated and includes latest run metrics, cluster cards,
+The dashboard includes latest run metrics, cluster cards,
 UMAP scatter, pressure rankings, benchmark samples, and a manual recompute
-button. Keep the admin token private and rotate it if it is shared outside the
-operator context.
+button. It has no login of its own, so it must only be served on a private network.
 
 Manual worker run:
 

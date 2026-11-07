@@ -57,14 +57,9 @@ def _seed_cohort(chat_db) -> None:
         conn.commit()
 
 
-def test_internal_report_requires_admin_token(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
-    assert client.post("/reports/internal").status_code == 401
-    assert client.get("/reports/internal/latest").status_code == 401
 
 
 def test_internal_report_grounded_in_capability_doc(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     _seed_cohort(chat_db)
 
     captured: dict = {}
@@ -74,7 +69,7 @@ def test_internal_report_grounded_in_capability_doc(chat_db, monkeypatch):
         return INTERNAL_MD
 
     monkeypatch.setattr(openai_client, "complete_report", fake_complete)
-    resp = client.post("/reports/internal", headers={"Authorization": "Bearer secret"})
+    resp = client.post("/reports/internal")
 
     assert resp.status_code == 200
     body = resp.json()
@@ -95,13 +90,12 @@ def test_internal_report_grounded_in_capability_doc(chat_db, monkeypatch):
         cur.execute("SELECT session_id, company_id FROM reports WHERE type = 'internal_macro'")
         assert cur.fetchone() == (None, None)  # cohort-wide, not session/company scoped
 
-    latest = client.get("/reports/internal/latest", headers={"Authorization": "Bearer secret"})
+    latest = client.get("/reports/internal/latest")
     assert latest.status_code == 200
     assert latest.json()["id"] == body["id"]
 
 
 def test_internal_report_rejects_missing_fit_categories(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     _seed_cohort(chat_db)
     bad_md = INTERNAL_MD.replace("Current product", "covered").replace("Roadmap candidate", "gap").replace(
         "Third-party", "elsewhere"
@@ -111,14 +105,13 @@ def test_internal_report_rejects_missing_fit_categories(chat_db, monkeypatch):
         return bad_md
 
     monkeypatch.setattr(openai_client, "complete_report", fake_complete)
-    resp = client.post("/reports/internal", headers={"Authorization": "Bearer secret"})
+    resp = client.post("/reports/internal")
     assert resp.status_code == 502
     assert "fit categories" in resp.json()["detail"]
 
 
 def test_internal_report_fails_clearly_without_capability_doc(chat_db, monkeypatch, tmp_path):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     monkeypatch.setattr(report_generation, "CAPABILITIES_PATH", tmp_path / "missing.md")
-    resp = client.post("/reports/internal", headers={"Authorization": "Bearer secret"})
+    resp = client.post("/reports/internal")
     assert resp.status_code == 502
     assert "capability document not found" in resp.json()["detail"]

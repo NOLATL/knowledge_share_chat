@@ -47,7 +47,7 @@ describe("DemoCockpit", () => {
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<DemoCockpit initialSessionId="s1" initialToken="secret" />);
+    render(<DemoCockpit initialSessionId="s1" />);
 
     expect(await screen.findByText("Demo Co")).toBeInTheDocument();
     expect(screen.getByText("4/14")).toBeInTheDocument();
@@ -55,18 +55,17 @@ describe("DemoCockpit", () => {
     const targets = screen.getAllByRole("link", { name: "Open" }).map((link) => link.getAttribute("href"));
     expect(targets).toContain("/session/resume-1");
     expect(targets).toContain("/external/c1");
-    expect(targets).toContain("/internal?token=secret");
-    expect(fetchMock).toHaveBeenCalledWith("/api/admin/demo?token=secret&sessionId=s1");
+    expect(targets).toContain("/internal");
+    expect(fetchMock).toHaveBeenCalledWith("/api/admin/demo?sessionId=s1");
   });
 
-  it("stays idle until token and session are entered", async () => {
+  it("stays idle until a session is entered", async () => {
     render(<DemoCockpit />);
 
-    expect(screen.getByText("Enter a session id and admin token to load demo readiness.")).toBeInTheDocument();
+    expect(screen.getByText("Enter a session id to load demo readiness.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Load demo" })).toBeDisabled();
 
     fireEvent.change(screen.getByLabelText("Session id"), { target: { value: "s1" } });
-    fireEvent.change(screen.getByLabelText("Admin token"), { target: { value: "secret" } });
 
     await waitFor(() => expect(screen.getByRole("button", { name: "Load demo" })).not.toBeDisabled());
   });

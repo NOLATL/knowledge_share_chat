@@ -78,16 +78,12 @@ def _seed(chat_db) -> dict:
     return ids
 
 
-def test_internal_snapshot_requires_admin(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
-    assert client.get("/admin/internal").status_code == 401
 
 
 def test_internal_snapshot_groups_members_by_grain_persona(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     ids = _seed(chat_db)
 
-    body = client.get("/admin/internal", headers={"Authorization": "Bearer secret"}).json()
+    body = client.get("/admin/internal").json()
 
     assert body["run"]["n_clusters"] == 2
 
@@ -115,7 +111,6 @@ def test_internal_snapshot_groups_members_by_grain_persona(chat_db, monkeypatch)
 
 
 def test_internal_snapshot_empty_without_runs(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
-    body = client.get("/admin/internal", headers={"Authorization": "Bearer secret"}).json()
+    body = client.get("/admin/internal").json()
     assert body["run"] is None
     assert body["scopes"]["function"]["clusters"] == []

@@ -70,7 +70,7 @@ function stubFetch() {
 describe("InternalDashboard", () => {
   it("shows legend priority tags and reveals the detail card only on selection", async () => {
     stubFetch();
-    render(<InternalDashboard token="secret" />);
+    render(<InternalDashboard />);
 
     // Legend rows: numbered swatch + label + stat + priority tag. No detail card yet.
     expect((await screen.findAllByText("Strategic CFOs in Growth Mode")).length).toBeGreaterThan(0);
@@ -112,7 +112,7 @@ describe("InternalDashboard", () => {
 
   it("renders one write-up section and no duplicate intelligence panel", async () => {
     stubFetch();
-    render(<InternalDashboard token="secret" />);
+    render(<InternalDashboard />);
 
     expect(await screen.findByLabelText("Internal intelligence write-up")).toBeInTheDocument();
     expect(screen.queryByText(/^Internal intelligence \(.+ only\)$/)).not.toBeInTheDocument();

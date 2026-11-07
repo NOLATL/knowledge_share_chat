@@ -517,12 +517,9 @@ Strong fit: spreadsheet-heavy close, NetSuite ERP, controller-led buying committ
 """
 
 
-def test_account_report_admin_gated_and_grounded(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
+def test_account_report_grounded(chat_db, monkeypatch):
     company_id = _seed_company(chat_db)
     _add_fpa_function(chat_db, company_id)
-
-    assert client.post(f"/companies/{company_id}/reports/account").status_code == 401
 
     async def fake_complete(messages):
         system = messages[0]["content"]
@@ -533,7 +530,7 @@ def test_account_report_admin_gated_and_grounded(chat_db, monkeypatch):
 
     monkeypatch.setattr(openai_client, "complete_report", fake_complete)
     resp = client.post(
-        f"/companies/{company_id}/reports/account", headers={"Authorization": "Bearer secret"}
+        f"/companies/{company_id}/reports/account"
     )
 
     assert resp.status_code == 200
@@ -542,14 +539,13 @@ def test_account_report_admin_gated_and_grounded(chat_db, monkeypatch):
     assert "## Product Fit" in body["rendered_md"]
 
     latest = client.get(
-        f"/companies/{company_id}/reports/account/latest", headers={"Authorization": "Bearer secret"}
+        f"/companies/{company_id}/reports/account/latest"
     )
     assert latest.status_code == 200
     assert latest.json()["id"] == body["id"]
 
 
 def test_account_report_rejects_missing_fit_categories(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     company_id = _seed_company(chat_db)
 
     async def fake_complete(messages):
@@ -559,7 +555,7 @@ def test_account_report_rejects_missing_fit_categories(chat_db, monkeypatch):
 
     monkeypatch.setattr(openai_client, "complete_report", fake_complete)
     resp = client.post(
-        f"/companies/{company_id}/reports/account", headers={"Authorization": "Bearer secret"}
+        f"/companies/{company_id}/reports/account"
     )
     assert resp.status_code == 502
     assert "fit categories" in resp.json()["detail"]

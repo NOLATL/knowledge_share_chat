@@ -74,7 +74,7 @@ export default function HubPage() {
           index="02"
           tag="Internal Use"
           title="Internal"
-          description="Cohort intelligence for the room only: function and company personas with named-member drill-down, account intel with product fit, pressure rankings, the positioning map, and the macro write-up with the investor narrative. Admin token required."
+          description="Cohort intelligence for the room only: function and company personas with named-member drill-down, account intel with product fit, pressure rankings, the positioning map, and the macro write-up with the investor narrative."
           cta="Open internal dashboard"
           divider
         />

@@ -11,20 +11,11 @@ from playbook_shared.analytics.pipeline import RecomputeSummary
 client = TestClient(app)
 
 
-def test_admin_recompute_requires_configured_token(monkeypatch):
-    monkeypatch.delenv("ADMIN_RECOMPUTE_TOKEN", raising=False)
-    resp = client.post("/admin/recompute")
-    assert resp.status_code == 503
 
 
-def test_admin_recompute_rejects_invalid_token(monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
-    resp = client.post("/admin/recompute", headers={"Authorization": "Bearer wrong"})
-    assert resp.status_code == 401
 
 
-def test_admin_recompute_runs_with_valid_token(monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
+def test_admin_recompute_runs(monkeypatch):
 
     def fake_recompute():
         return RecomputeSummary(
@@ -41,7 +32,7 @@ def test_admin_recompute_runs_with_valid_token(monkeypatch):
         )
 
     monkeypatch.setattr(admin, "recompute", fake_recompute)
-    resp = client.post("/admin/recompute", headers={"Authorization": "Bearer secret"})
+    resp = client.post("/admin/recompute")
 
     assert resp.status_code == 200
     assert resp.json()["run_id"] == "run-1"
@@ -49,18 +40,15 @@ def test_admin_recompute_runs_with_valid_token(monkeypatch):
 
 
 def test_admin_demo_status_requires_session_id(monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
-    resp = client.get("/admin/demo/status", headers={"Authorization": "Bearer secret"})
+    resp = client.get("/admin/demo/status")
     assert resp.status_code == 400
 
 
 def test_admin_demo_status_returns_readiness(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     session_id, _respondent_id = _analytics_fixture(chat_db)
 
     resp = client.get(
         f"/admin/demo/status?session_id={session_id}",
-        headers={"Authorization": "Bearer secret"},
     )
 
     assert resp.status_code == 200
@@ -74,10 +62,8 @@ def test_admin_demo_status_returns_readiness(chat_db, monkeypatch):
 
 
 def test_admin_demo_status_rejects_unknown_session(chat_db, monkeypatch):
-    monkeypatch.setenv("ADMIN_RECOMPUTE_TOKEN", "secret")
     resp = client.get(
         f"/admin/demo/status?session_id={uuid.uuid4()}",
-        headers={"Authorization": "Bearer secret"},
     )
     assert resp.status_code == 404
 
